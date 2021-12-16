@@ -42,19 +42,29 @@ def solution2():
       if instruction[0] == "fold along y":
          # create new grid
          y_axis = int(instruction[1])
-         new_grid = [[0 for i in range(0, len(grid) + 1)] for j in range(0, y_axis)]
+         new_grid = [[0 for i in range(0, len(grid[0]))] for j in range(0, max([y_axis, len(grid) - y_axis]) - 1)]
 
          row_index = 0
          for row in grid:
             if row_index < y_axis:
                # fill in above the fold
-               new_grid[row_index] = row.copy()
-            else:
+               if max([y_axis, len(grid) - y_axis]) == len(grid) - y_axis == y_axis:
+                  new_grid[row_index] = row.copy()
+               elif max([y_axis, len(grid) - y_axis]) == len(grid) - y_axis:
+                  new_grid[len(new_grid) - (y_axis - row_index)] = row.copy()
+               else:
+                  new_grid[row_index] = row.copy()
+            elif row_index > y_axis:
                # fill in below the fold
                column_index = 0
                for column in row:
                   if column == 1:
-                     new_grid[len(grid) - row_index - 1][column_index] = 1
+                     if max([y_axis, len(grid) - y_axis]) == len(grid) - y_axis == y_axis:
+                        new_grid[len(grid) - row_index - 1][column_index] = 1
+                     elif max([y_axis, len(grid) - y_axis]) == len(grid) - y_axis:
+                        new_grid[len(new_grid) - (row_index - y_axis)][column_index] = 1
+                     else:
+                        new_grid[len(grid) - row_index - 1][column_index] = 1
                   column_index += 1
             row_index += 1
 
@@ -62,7 +72,7 @@ def solution2():
       elif instruction[0] == "fold along x":
          # create new grid
          x_axis = int(instruction[1])
-         new_grid = [[0 for i in range(0, x_axis)] for j in range(0, len(grid))]
+         new_grid = [[0 for i in range(0, max([x_axis, len(grid[0]) - x_axis]) - 1)] for j in range(0, len(grid))]
 
          row_index = 0
          for row in grid:
@@ -70,8 +80,9 @@ def solution2():
             for column in row:
                if column_index < x_axis:
                   # fill in to the left of the fold
-                  new_grid[row_index][column_index] = grid[row_index][column_index]
-               else:
+                  if max([x_axis, len(row) - x_axis]) == len(row) - x_axis == x_axis:
+                     new_grid[row_index][column_index] = grid[row_index][column_index]
+               elif column_index > x_axis:
                   if column == 1:
                      new_grid[row_index][len(row) - column_index - 1] = 1
                column_index += 1
