@@ -25,31 +25,31 @@ def solution2():
    
    for rule in sorted(rules.keys()):
       print(rule + ":" + rules[rule])
-   # # B, C, F, H, K, N, O, P, S, V
-   # polymer_dictionary = {
-   #    'B': 0,
-   #    'C': 0,
-   #    'F': 0,
-   #    'H': 0,
-   #    'K': 0,
-   #    'N': 0,
-   #    'O': 0,
-   #    'P': 0,
-   #    'S': 0,
-   #    'V': 0
-   # }
+   # B, C, F, H, K, N, O, P, S, V
+   polymer_dictionary = {
+      'B': 0,
+      'C': 0,
+      'F': 0,
+      'H': 0,
+      'K': 0,
+      'N': 0,
+      'O': 0,
+      'P': 0,
+      'S': 0,
+      'V': 0
+   }
 
-   # # initial counts
-   # for char in template:
-   #    polymer_dictionary[char] += 1
+   # initial counts
+   for char in template:
+      polymer_dictionary[char] += 1
 
-   # # For each pair
-   # for count in range(0, len(template) - 1):
-   #    findSubPairs2(template[count:(count + 2)], rules, 10, polymer_dictionary)
-   #    print(count)
-   
-   # print(polymer_dictionary)
-   # print(max(polymer_dictionary.items(), key=lambda x: x[1])[1] - min(polymer_dictionary.items(), key=lambda x: x[1])[1])
+   # For each pair
+   for count in range(0, len(template) - 1):
+      findSubPairs2(template[count:(count + 2)], rules, 10, polymer_dictionary)
+      print(polymer_dictionary)
+      print(count)
+
+   print(max(polymer_dictionary.items(), key=lambda x: x[1])[1] - min(polymer_dictionary.items(), key=lambda x: x[1])[1])
 
 def findSubPairs2(pair, rules, step, counts):
    if step != 0 :
