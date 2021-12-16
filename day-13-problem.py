@@ -2,12 +2,12 @@ import time
 
 def main():
    start = time.time()
-   solution2()
+   solution1()
    end = time.time()
    print(end - start)
 
 def solution2():
-   file1 = open('day-13-data-test.txt', 'r')
+   file1 = open('day-13-data.txt', 'r')
    paths = []
 
    reading_coordinates = True
@@ -42,29 +42,29 @@ def solution2():
       if instruction[0] == "fold along y":
          # create new grid
          y_axis = int(instruction[1])
-         new_grid = [[0 for i in range(0, len(grid[0]))] for j in range(0, max([y_axis, len(grid) - y_axis]) - 1)]
+         new_grid = [[0 for i in range(0, len(grid[0]))] for j in range(0, max([y_axis, len(grid) - y_axis - 1]))]
 
          row_index = 0
          for row in grid:
             if row_index < y_axis:
                # fill in above the fold
-               if max([y_axis, len(grid) - y_axis]) == len(grid) - y_axis == y_axis:
-                  new_grid[row_index] = row.copy()
-               elif max([y_axis, len(grid) - y_axis]) == len(grid) - y_axis:
+               if max([y_axis, len(grid) - y_axis - 1]) == len(grid) - y_axis - 1:
+                  # y-axis above the midpoint
                   new_grid[len(new_grid) - (y_axis - row_index)] = row.copy()
                else:
+                  # y-axis below the midpoint
                   new_grid[row_index] = row.copy()
             elif row_index > y_axis:
                # fill in below the fold
                column_index = 0
                for column in row:
                   if column == 1:
-                     if max([y_axis, len(grid) - y_axis]) == len(grid) - y_axis == y_axis:
+                     if max([y_axis, len(grid) - y_axis - 1]) == len(grid) - y_axis - 1:
+                        # y-axis above the midpoint
                         new_grid[len(grid) - row_index - 1][column_index] = 1
-                     elif max([y_axis, len(grid) - y_axis]) == len(grid) - y_axis:
-                        new_grid[len(new_grid) - (row_index - y_axis)][column_index] = 1
                      else:
-                        new_grid[len(grid) - row_index - 1][column_index] = 1
+                        # y-axis below the midpoint
+                        new_grid[len(new_grid) - (row_index - y_axis)][column_index] = 1
                   column_index += 1
             row_index += 1
 
@@ -72,7 +72,7 @@ def solution2():
       elif instruction[0] == "fold along x":
          # create new grid
          x_axis = int(instruction[1])
-         new_grid = [[0 for i in range(0, max([x_axis, len(grid[0]) - x_axis]) - 1)] for j in range(0, len(grid))]
+         new_grid = [[0 for i in range(0, max([x_axis, len(grid[0]) - x_axis - 1]))] for j in range(0, len(grid))]
 
          row_index = 0
          for row in grid:
@@ -80,11 +80,21 @@ def solution2():
             for column in row:
                if column_index < x_axis:
                   # fill in to the left of the fold
-                  if max([x_axis, len(row) - x_axis]) == len(row) - x_axis == x_axis:
+                  if max([x_axis, len(row) - x_axis - 1]) == len(row) - x_axis - 1:
+                     # x-axis to the left of the midpoint
+                     new_grid[row_index][len(new_grid[0]) - (x_axis - column_index)] = grid[row_index][column_index]
+                  else:
+                     # x-axis to the right of the midpoint
                      new_grid[row_index][column_index] = grid[row_index][column_index]
                elif column_index > x_axis:
                   if column == 1:
-                     new_grid[row_index][len(row) - column_index - 1] = 1
+                     if max([x_axis, len(row) - x_axis - 1]) == len(row) - x_axis - 1:
+                        # x-axis to the left of the midpoint
+                        new_grid[row_index][len(row) - column_index - 1] = 1
+                     else:
+                        # x-axks to the right of the midpoint
+                        new_grid[row_index][len(new_grid[0]) - (column_index - x_axis)] = 1
+
                column_index += 1
             row_index += 1
          
@@ -123,33 +133,6 @@ def solution1():
    # populate the grid with coordinates
    for coordinate in coordinates:
       grid[coordinate[1]][coordinate[0]] = 1
-   
-   # fold once
-   # instruction = folding_instructions[0]
-   # if instruction[0] == "fold along y":
-   #    # create new grid
-   #    y_axis = int(instruction[1])
-   #    new_grid = [[0 for i in range(0, len(grid) + 1)] for j in range(0, y_axis)]
-
-   #    row_index = 0
-   #    for row in grid:
-   #       if row_index < y_axis:
-   #          # fill in above the fold
-   #          new_grid[row_index] = row.copy()
-   #       else:
-   #          # fill in below the fold
-   #          column_index = 0
-   #          for column in row:
-   #             if column == 1:
-   #                new_grid[len(grid) - row_index - 1][column_index] = 1
-   #             column_index += 1
-   #       row_index += 1
-
-   #    # count the 1s
-   #    total_dots = sum([sum(row) for row in new_grid])
-   #    print(total_dots)
-   #    grid = new_grid.copy()
-   #    new_grid.clear()
    
    # fold twice
    instruction = folding_instructions[0]
